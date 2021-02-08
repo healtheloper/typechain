@@ -28,6 +28,7 @@ const createNewBlock = (data) => {
     const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
     return newBlock;
 };
+const getHashForBlock = (anyBlock) => Block.calculateBlockHash(anyBlock.index, anyBlock.previousHash, anyBlock.timestamp, anyBlock.data);
 const isBlockValid = (candidateBlock, previousBlock) => {
     if (!Block.validateStructure(candidateBlock)) {
         return false;
@@ -38,7 +39,17 @@ const isBlockValid = (candidateBlock, previousBlock) => {
     else if (previousBlock.hash !== candidateBlock.previousHash) {
         return false;
     }
+    else if (getHashForBlock(candidateBlock) !== candidateBlock.hash) {
+        return false;
+    }
+    else {
+        return true;
+    }
 };
-console.log(createNewBlock("hello"), createNewBlock("bye-bye"));
+const addBlock = (candidateBlock) => {
+    if (isBlockValid(candidateBlock, getLastestBlock())) {
+        blockchain.push(candidateBlock);
+    }
+};
 module.exports = {};
 //# sourceMappingURL=index.js.map
