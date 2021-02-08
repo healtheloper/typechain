@@ -38,6 +38,14 @@ class Block {
 }
 
 const genesisBlock: Block = new Block(1, "0202020202", "", "hello", 210209);
+
+genesisBlock.hash = Block.calculateBlockHash(
+  genesisBlock.index,
+  genesisBlock.previousHash,
+  genesisBlock.timestamp,
+  genesisBlock.data
+);
+
 let blockchain: Block[] = [genesisBlock];
 
 const getBlockchain = (): Block[] => blockchain;
@@ -63,6 +71,7 @@ const createNewBlock = (data: string): Block => {
     data,
     newTimestamp
   );
+  addBlock(newBlock);
   return newBlock;
 };
 
@@ -92,5 +101,11 @@ const addBlock = (candidateBlock: Block): void => {
     blockchain.push(candidateBlock);
   }
 };
+
+createNewBlock("second block");
+createNewBlock("third block");
+createNewBlock("forth block");
+
+console.log(blockchain);
 
 export = {};
